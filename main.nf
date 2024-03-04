@@ -38,7 +38,7 @@ process bedgraphtobigwig_pro {
     val bw_output
 
   when:
-      // (  ! file("${params.project_folder}/${bw_output}/${sample_name}.bw").exists() )
+      (  ! file("${params.project_folder}/${bw_output}/${sample_name}.bw").exists() )
 
   script:
     """
@@ -66,6 +66,6 @@ workflow bedgraphtobigwig_ATACseq {
     sample=Channel.fromPath( ["${params.bdg_folder}/*.bdg"] )
     sample=sample.map{ "$it.name" }
     sample_name=sample.map{ "$it".replace(".bdg","") }
-    sample.view()
+    // sample.view()
     bedgraphtobigwig_pro(sample,sample_name,bw_output)
 }
