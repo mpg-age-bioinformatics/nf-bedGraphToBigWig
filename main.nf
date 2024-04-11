@@ -50,6 +50,21 @@ rm ${sample}.sorted
     """
 }
 
+process upload_paths {
+  stageInMode 'symlink'
+  stageOutMode 'move'
+
+  script:
+  """
+    rm -rf upload.txt
+
+    cd ${params.project_folder}/${bw_output}
+    for f in \$(ls *pileup.bw) ; do echo "bw_output \$(readlink -f \${f})" >>  upload.txt_ ; done 
+    uniq upload.txt_ upload.txt 
+    rm upload.txt_
+  """
+}
+
 workflow images {
   main:
     get_images()
@@ -68,4 +83,13 @@ workflow bedgraphtobigwig_ATACseq {
     sample_name=sample.map{ "$it".replace(".bdg","") }
     // sample.view()
     bedgraphtobigwig_pro(sample,sample_name,bw_output)
+}
+
+workflow upload {
+  if ( 'bw_output' in params.keySet() ) {
+    bw_output="${params.bw_output}"
+  } else {
+    bw_output="bw_output"
+  }
+  upload_paths(bw_output)
 }
