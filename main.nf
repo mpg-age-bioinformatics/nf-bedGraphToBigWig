@@ -53,6 +53,9 @@ rm ${sample}.sorted
 process upload_paths {
   stageInMode 'symlink'
   stageOutMode 'move'
+  
+  input:
+    val bw_output
 
   script:
   """
