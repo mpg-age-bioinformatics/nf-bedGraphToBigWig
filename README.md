@@ -28,6 +28,6 @@ git clone https://github.com/mpg-age-bioinformatics/nf-bedGraphToBigWig.git
 
 Run the workflow:
 ```
-nextflow run nf-bedGraphToBigWig  -params-file  bigwig_test/${PARAMS} -profile ${PROFILE} -entry images --user "$(id -u):$(id -g)"
-nextflow run nf-bedGraphToBigWig  -params-file  bigwig_test/${PARAMS} -profile ${PROFILE} -entry bedgraphtobigwig_ATACseq --user "$(id -u):$(id -g)"
+nextflow run nf-bedGraphToBigWig  -params-file  bigwig_test/${PARAMS} -entry images --user "$(id -u):$(id -g)"
+nextflow run nf-bedGraphToBigWig  -params-file  bigwig_test/${PARAMS} -entry bedgraphtobigwig_ATACseq --user "$(id -u):$(id -g)"
 ```

@@ -43,9 +43,9 @@ process bedgraphtobigwig_pro {
   script:
     """
 cd /bdg_folder/
-mkdir -p /workdir/${bw_output}
+mkdir -p ${params.project_folder}/${bw_output}
 bedtools sort -i ${sample} > ${sample}.sorted
-bedGraphToBigWig ${sample}.sorted ${params.sizes} /workdir/${bw_output}/${sample_name}.bw
+bedGraphToBigWig ${sample}.sorted ${params.sizes} ${params.project_folder}/${bw_output}/${sample_name}.bw
 rm ${sample}.sorted
     """
 }
