@@ -81,11 +81,18 @@ workflow bedgraphtobigwig_ATACseq {
       bw_output="bw_output"
     }
 
-    sample=Channel.fromPath( ["${params.bdg_folder}/*.bdg"] )
-    sample=sample.map{ "$it.name" }
-    sample_name=sample.map{ "$it".replace(".bdg","") }
+    if ( 'sajr_output' in params.keySet() ) {
+        sample = Channel.fromPath("${params.star_out}/*.bed")
+        sample=sample.map{ "$it.name" }
+        sample_name = sample.map { "$it".replace(".bed", "") }
+    } else {
+        sample=Channel.fromPath( ["${params.bdg_folder}/*.bdg"] )
+        sample=sample.map{ "$it.name" }
+        sample_name=sample.map{ "$it".replace(".bdg","") }
     // sample.view()
+    }
     bedgraphtobigwig_pro(sample,sample_name,bw_output)
+
 }
 
 workflow upload {
