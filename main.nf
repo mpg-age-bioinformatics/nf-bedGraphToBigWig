@@ -56,17 +56,26 @@ process upload_paths {
   
   input:
     val bw_output
+    val pipe
 
   script:
   """
-    rm -rf upload.txt
-
+    rm -f upload.txt
     cd ${params.project_folder}/${bw_output}
-    for f in \$(ls *pileup.bw) ; do echo "bw_output \$(readlink -f \${f})" >>  upload.txt_ ; done 
+
+    if [ ${pipe} == "chip_atac" ] ; then
+      for f in \$(ls *pileup.bw) ; do echo "bw_output \$(readlink -f \${f})" >>  upload.txt_ ; done 
+    fi
+
+    if [ ${pipe} == "alt_splicing" ] ; then
+      for f in \$(ls *.bw) ; do echo "bw_output \$(readlink -f \${f})" >>  upload.txt_ ; done 
+    fi
+
     uniq upload.txt_ upload.txt 
     rm upload.txt_
   """
 }
+
 
 workflow images {
   main:
@@ -101,5 +110,11 @@ workflow upload {
   } else {
     bw_output="bw_output"
   }
-  upload_paths(bw_output)
+
+  if ( 'sajr_output' in params.keySet() ) {
+    pipe="alt_splicing"
+  } else {
+    pipe="chip_atac"
+  }
+  upload_paths(bw_output, pipe)
 }
